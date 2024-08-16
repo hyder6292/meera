@@ -1,0 +1,9 @@
+const ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1YsTODgi52SChN3ZdIjwhnF_Fx3JubHWxF5zsTfHsLDQ/edit#gid=0")
+const sheet = ss.getSheetByName("financer")
+function doGet(e){
+  let obj = {};
+  let data = sheet.getDataRange().getValues()
+  obj.content = data;
+return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON)
+ 
+}

@@ -1,0 +1,2937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital@1&family=Poppins:wght@400;500;600&display=swap');
+  .wrapper{
+    max-width: 485px;
+    width: 100%;
+    background: #fff;
+    margin: auto;
+    /* padding: 22px 30px 40px; */
+    border-radius: 7px;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.05);
+    padding: 10px 10px 10px 10px;
+    height: auto;
+  }
+  
+  .wrapper header{
+    color: #4db2ec;
+    font-size: 22px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .wrapper .captcha-area{
+    display: flex;
+    height: 65px;
+    margin: 30px 0 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .captcha-area .captcha-img{
+    height: 100%;
+    width: 345px;
+    user-select: none;
+    background: #000;
+    border-radius: 5px;
+    position: relative;
+  }
+  .captcha-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    opacity: 0.95;
+  }
+  .captcha-img .captcha{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    color: #ae6262;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 10px;
+    transform: translate(-50%, -50%);
+    text-shadow: 0px 0px 2px #b1b1b1;
+    font-family: 'Noto Serif', serif;
+  }
+  .wrapper button{
+    outline: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    background: #1ea14f;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    width: 100px;
+  }
+  .wrapper button:hover{
+    background: #2fa5e9;
+  }
+  .captcha-area .reload-btn{
+    width: 75px;
+    height: 100%;
+    font-size: 25px;
+  }
+  .captcha-area .reload-btn i{
+    transition: transform 0.3s ease;
+  }
+  .captcha-area .reload-btn:hover i{
+    transform: rotate(15deg);
+  }
+  .wrapper .input-area{
+    height: 60px;
+    width: 100%;
+    position: relative;
+  }
+  .input-area input{
+    width: 100%;
+    height: 100%;
+    outline: none;
+    padding-left: 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid #bfbfbf;
+  }
+  .input-area input:is(:focus, :valid){
+    padding-left: 19px;
+    border: 2px solid #4db2ec;
+  }
+  .input-area input::placeholder{
+    color: #bfbfbf;
+  }
+  .input-area .check-btn{
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    font-size: 17px;
+    height: 45px;
+    padding: 0 20px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+  .input-area input:valid + .check-btn{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .wrapper .status-text{
+    display: none;
+    font-size: 18px;
+    text-align: center;
+    margin: 20px 0 -5px;
+  }
+  .download-btn-cn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 99999;
+  }
+  
+  .download-btn-cn a{
+     color: #fff;
+     padding: 14px 20px;
+     font-size: 16px;
+     text-decoration: none;
+     border-radius: 5px;
+     background: #5288f3;
+     border: 1px solid #fff;
+     font-family: 'Poppins', sans-serif;
+  }
+  
+  @media screen and (max-width: 600px){
+      .download-btn-cn{
+          right: 15px;
+          bottom: 25px;
+      }
+  
+      .download-btn-cn a{
+          font-size: 13px;
+          padding: 9px 15px;
+      }
+  }
+  
+  .google-auto-placed {
+      display: none!important;
+      visibility: hidden!important;
+      opacity: 0!important;
+      z-index: -9999;
+      position: absolute;
+      left: -200px;
+  }
+  
+  /* CodingNepal - Custom Sticky Bottom Ad Styling */
+  .sticky-bottom-ad {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 100px;
+    height: 100%;
+    z-index: 21474;
+    transition: bottom 0.25s ease;
+  }
+  
+  .sticky-bottom-ad.show {
+    bottom: 10px;
+  }
+  
+  .sticky-bottom-ad .ad-body {
+    padding: 3px;
+    display: flex;
+    background: #fff;
+    position: relative;
+  }
+  
+  .sticky-bottom-ad .close-btn {
+    position: absolute;
+    right: -25px;
+    top: 0px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #fff;
+  }
+  
+  .sticky-bottom-ad svg {
+    width: 17px;
+  }
+  
+  
+  /* CodingNepal - Custom Vignette Ads Styling */
+  .cn-vignette-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2147484000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.1s linear;
+  }
+  .cn-vignette-popup.show {
+    opacity: 1!important;
+    pointer-events: auto;
+  }
+  .cn-vignette-popup .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: rgba(52, 58, 65, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+  .cn-vignette-popup .popup-content {
+    background: #fff;
+    max-width: 728px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    padding: 10px;
+    overflow: hidden;
+    box-shadow: 0px 8px 12px rgba(60, 64, 67, 0.15), 0px 4px 4px rgba(60, 64, 67, 0.3);
+  }
+  
+  .cn-vignette-popup .popup-header {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px 10px;
+    justify-content: space-between;
+  }
+  .cn-vignette-popup .popup-title {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Poppins'!important;
+  }
+  .cn-vignette-popup .close-btn {
+    width: 21px;
+    cursor: pointer;
+  }
+  .cn-vignette-popup .popup-body {
+    padding: 7px 20px;
+  }
+  /* end for check your receipt */
+  :root{
+    --main-color: #10ac84;
+    --sec-color: green;
+    --tahjji-one : #f7d794;
+    --tahjji-two : #00d2d3;
+    --tahjjiback :#c8d6e5;
+    --heading-two :#4682b4;
+  
+  }
+  body{
+      margin:0px;
+      padding: 0px;
+      font-family: calibri;
+  }
+  *{
+      box-sizing: border-box;
+  }
+  ul{
+      list-style: none;
+  }
+  a{
+      text-decoration: none;
+  }
+  button{
+      outline: none;
+      border: none;
+  }
+  input{
+      outline: none;
+      border: none;
+  }
+  .main{
+  
+      width:100%;
+      height:768px;
+      position: relative;
+  }
+  .logo img{
+      height: 30px;
+          width: 50px;
+  }
+  nav{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0px 30px;
+      background-color:#fff;
+      box-shadow: 2px 2px 20px rgba(255, 151, 103, 0.164);
+      z-index: 1;
+      width:100%;
+      position: fixed;
+      left: 0px;
+      top: 0px;
+     margin-top: 2.5rem;
+  }
+  nav ul{
+      display: flex;
+      margin:0px;
+      padding: 0px;
+  }
+  nav ul li a{
+      height:40px;
+      line-height: 43px;
+      margin: 8px;
+      padding: 0px 10px;
+      display: flex;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-weight: 400;
+  
+      color:#111;
+      letter-spacing: 1px;
+      transition: 0.4s ease-in-out;
+  }
+  .active{
+      background-color: #4682b4;
+      color: #fff;
+  }
+  nav ul li a:hover{
+      border-radius: 5px;
+      background-color: #0f3d64;
+      color: #fff;
+      box-shadow: 5px 10px 30px rgba(1, 74, 2, 0.5);
+      transition: all ease 0.2s;
+  }
+  .home-content{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: absolute;
+      left: 50%;
+      top:50%;
+      transform: translate(-50%,-50%);
+      width:90%;
+  
+  }
+  .home-img{
+      width:500px;
+      height:400px;
+      margin:20px;
+  }
+  .home-img img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+  }
+  .home-text{
+      width:500px;
+      margin: 20px;
+  }
+  .home-text h1{
+      font-size: 3.5rem;
+      line-height: 55px;
+      color:#22252e;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin: 0px;
+  }
+  .home-text p{
+      font-size: 1rem;
+      color:#777474;
+  }
+  .home-text span{
+      color: #F14D5D;
+      text-decoration: underline;
+  }
+  .main-login{
+      width:120px;
+      height:40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #0f3d64;
+      color:#fff;
+      box-shadow: 5px 10px 30px rgba(219, 74, 6, 0.5);
+      text-transform: uppercase;
+      transition: 0.3s ease-in-out;
+  }
+  .main-login:hover{
+      background-color: #F14D5D;
+      transition: all ease 0.3s;
+  }
+  .arrow{
+      align-self: end;
+      width:50%;
+      border-right: 1px solid #F14D5D;
+      height: 20%;
+      margin-bottom:20em ;
+      position: absolute;
+      bottom: 5px;
+      right: 70px;
+      animation: arrow-animation ease 1.5s;
+  
+  }
+  .arrow::after{
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 11px 11px 0px 11px;
+      border-color: #F14D5D transparent transparent transparent;
+      right: -0.7em;
+      bottom: -2px;
+  }
+  .scroll{
+      position: absolute;
+      bottom: 260px;
+      right:55px;
+      font-weight: 600;
+  }
+  .hidden{
+    opacity: 0;
+  }
+  .console-container{
+    font-family: 'Metal mania', cursive;
+    font-size: 1em;
+    text-align: justify;
+    display: block;
+    color: yellow;
+    text-indent: 3em;
+    /* margin: auto; */
+    padding: 15px 15px 30px 15px;
+  
+  }
+  .console-underscore{
+    display: inline-block;
+    position: relative;
+    top: -0.14em;
+    left: 10px;
+  
+  }
+  .noticeboard{
+      border: 8px solid #dfa427;
+      box-shadow: 0 0.4rem 1.5rem rgba(0,0,0,.5);
+      height: auto;
+      background-color: black;
+      color: #fff;
+      border-style: double;
+      padding: 10px 5px;
+      padding-bottom: 30px;
+  
+  }
+  .noticeboard h2{
+      text-align: center;
+  }
+  .noticeboard h5{
+      text-align: right;
+      padding-right: 20px;
+  
+  }
+  @keyframes arrow-animation{
+      0%{
+          bottom: 70px;
+          opacity: 0.2;
+      }
+      100%{
+          bottom: 5px;
+          opacity: 1;
+      }
+  }
+  .services{
+      background-size: 1000px;
+      background-position: center;
+  }
+  .services-heading{
+      margin-top: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+  }
+  .services-heading h2:hover {
+      color: red;
+      cursor: pointer;
+  }
+  .services-heading h2{
+      line-height: 55px;
+      font-size: 2.2rem;
+      color:var(--heading-two);
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin: 0px;
+  }
+  .services-heading p{
+      font-size: 1rem;
+      color:#777474;
+      width:50%;
+  }
+  .box-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 20px 30px;
+  }
+  .box{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width:300px;
+      height: 400px;
+      text-align: center;
+      box-shadow: 2px 2px 20px rgba(90,118,253,0.15);
+      border-radius: 10px;
+      background-color: #fff;
+      margin: 20px;
+      flex-grow: 1;
+  }
+  .box img{
+      height:200px;
+      margin:10px;
+  
+  }
+  .box font{
+      font-size: 1.5rem;
+      color: #22252e;
+      letter-spacing: 1px;
+      font-weight: 700;
+  }
+  .box p{
+      font-size: 1rem;
+      color: #777474;
+      display: block;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 500px;
+  }
+  .box a{
+      width:150px;
+      height:40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #5a76fd;
+      text-transform: uppercase;
+      margin: auto;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color:#5a76fd;
+      margin:0px;
+  }
+  .box a:hover{
+      background-color: #5a76fd;
+      color:#fff;
+      box-shadow: 5px 10px 30px rgba(90,118,253,0.5);
+      transition: all ease 0.3s;
+  }
+  
+  .box{
+      width:200px;
+      height: 400px;
+      background-color: #ffffff;
+      box-shadow: 2px 2px 30px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px;
+      position: relative;
+  }
+  .about{
+  
+      width:100%;
+      height:768px;
+      position: relative;
+  }
+  .about-content{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: absolute;
+      left: 50%;
+      top:50%;
+      transform: translate(-50%,-50%);
+      width:90%;
+  
+  }
+  .about-img{
+      width:500px;
+      height:400px;
+      margin:20px;
+  }
+  .about-img img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+  }
+  .about-text{
+      width:500px;
+      margin: 20px;
+  }
+  .about-text h1{
+      font-size: 3.5rem;
+      line-height: 55px;
+      color:#22252e;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin: 0px;
+  }
+  .about-text p{
+      font-size: 1rem;
+      color:#777474;
+  }
+  .about-text span{
+      color: #F14D5D;
+      text-decoration: underline;
+  }
+  .about-login{
+      width:120px;
+      height:40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f54417;
+      color:#fff;
+      box-shadow: 5px 10px 30px rgba(219, 74, 6, 0.5);
+      text-transform: uppercase;
+      transition: 0.3s ease-in-out;
+  }
+  .about-login:hover{
+      background-color: #F14D5D;
+      transition: all ease 0.3s;
+  }
+  .section-5-text{
+      text-align: center;
+      padding-bottom: 40px;
+  }
+  .section-5-text h1{
+      font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2.5rem;
+  line-height: 47px;
+  color: #000000;
+  }
+  .section-5-text p{
+      font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 21px;
+  color: #545454;
+  }
+  .section-5-text-btn{
+      margin-top: 90px;
+      margin-bottom: 60px;
+  }
+  .section-5-text-btn input{
+      width: 30%;
+  height: 53px;
+  border: none;
+  outline: none;
+  font-size:20px;
+  background: #F3F3F3;
+  box-shadow: 5px 10px 30px rgba(219, 74, 6, 0.5);
+  padding-left: 20px;
+  }
+  .section-5-text-btn button{
+      background: #fd0000;
+      width: 221px;
+  height: 53px;
+  margin-left: 15px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  text-align: center;
+  
+  color: #FFFFFF;
+  }
+  footer{
+      width:100%;
+      text-align: center;
+      padding: 0px 5%;
+      border-top: 1px solid rgba(231, 9, 9, 0.2);
+  }
+  footer a,
+  footer p{
+      color:#000000;
+  }
+  nav .menu-btn{
+      display: none;
+  }
+  @media(max-width:1100px){
+      nav{
+          justify-content: space-between;
+          height: 65px;
+          top: -30px;
+      }
+      .menu{
+          display: none;
+          position: absolute;
+          top: 65px;
+          left: 0px;
+          background-color: #fff;
+          border-bottom: 4px solid #F14D5D;
+          width:100%;
+      }
+      .menu li{
+          width:100%;
+      }
+      nav .menu li a{
+          width:100%;
+          height: 40px;
+          justify-content: center;
+          align-items: center;
+          margin:0px;
+          padding: 25px;
+          border:1px solid rgba(38,38,38,0.03);
+      }
+      nav .menu-icon{
+          cursor: pointer;
+          float: right;
+          padding: 28px 20px;
+          position: relative;
+          user-select: none;
+      }
+      nav .menu-icon .nav-icon{
+          background-color: #333333;
+          display: block;
+          height: 2px;
+          position: relative;
+          transition: background 0.2s ease-out;
+          width:18px;
+      }
+      nav .menu-icon .nav-icon:before,
+      nav .menu-icon .nav-icon:after{
+          background: #333333;
+          content: '';
+          display: block;
+          height: 100%;
+          position: absolute;
+          transition: all ease-out 0.2s;
+          width:100%;
+      }
+      nav .menu-icon .nav-icon:before{
+          top: 5px;
+      }
+      nav .menu-icon .nav-icon:after{
+          top:-5px;
+      }
+      nav .menu-btn:checked ~ .menu-icon .nav-icon{
+          background: transparent;
+      }
+      nav .menu-btn:checked ~ .menu-icon .nav-icon:before{
+          transform: rotate(-45deg);
+          top: 0;
+      }
+      nav .menu-btn:checked ~ .menu-icon .nav-icon:after{
+          transform: rotate(45deg);
+          top: 0;
+      }
+      nav .menu-btn{
+          display: none;
+      }
+      nav .menu-btn:checked ~ .menu{
+          display: block;
+      }
+      .home-img{
+          display: none;
+      }
+      .home-text{
+          width:100%;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          height: 45vh;
+          margin: 0px;
+      }
+      .home-content{
+          text-align: center;
+          width:100%;
+          margin:0px;
+          position: static;
+          transform: translate(0px,70px);
+          box-shadow: 2px 2px 30px rgba(255, 102, 55, 0.178);
+      }
+      .home-text h1{
+          color:rgb(0, 0, 0);
+          padding: 0px 20px;
+          font-size: 2.5rem;
+      }
+      .home-text p{
+          color:rgba(32, 32, 32, 0.85);
+          margin: 10px 0px 20px 0px;
+          width:50%;
+      }
+  
+      .about-img{
+          display: none;
+      }
+      .about-text{
+          width:100%;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          height: 45vh;
+          margin: 0px;
+      }
+      .about-content{
+          text-align: center;
+          width:100%;
+          margin:0px;
+          position: static;
+          transform: translate(0px,70px);
+          box-shadow: 2px 2px 30px rgba(255, 102, 55, 0.178);
+      }
+      .about-text h1{
+          color:rgb(0, 0, 0);
+          padding: 0px 20px;
+          font-size: 2.5rem;
+      }
+      .about-text p{
+          color:rgba(32, 32, 32, 0.85);
+          margin: 10px 0px 20px 0px;
+          width:50%;
+      }
+  
+      .arrow{
+          height: 70px;
+      }
+  
+     .main{
+  
+          padding: 75px 0px 0px 0;
+           background-color: #4682b4;
+          background-size: cover;
+          height: 900px;
+     }.arrow{
+         left: 2%;
+         margin-bottom: 15em;
+     }.scroll{
+         left: 48%;
+         bottom: 200px;
+     }
+  }
+  @media(max-width:720px){
+      .home-text p{
+          width:70%;
+          text-align: center;
+      }
+      .home-content h1{
+          font-size: 1.9rem;
+          padding: 10px 10px;
+          line-height: 30px;
+      }
+      .about-text p{
+          width:70%;
+          text-align: center;
+      }
+      .about-content h1{
+          font-size: 1.9rem;
+          padding: 10px 10px;
+          line-height: 30px;
+      }
+      .services{
+          margin-top: 20px;
+      }
+      .services-heading{
+          margin:20px;
+  
+      }
+      .services-heading h2{
+          font-size: 1.7rem;
+          line-height: 40px;
+      }
+      .services-heading p{
+          width:100%;
+      }
+      .box{
+          width:100%;
+          margin: 20px 0px !important;
+          padding: 0px 20px;
+          flex-grow: 1;
+      }
+      .box img{
+          height: 100px;
+          width:100%;
+          object-fit: contain;
+      }
+      .section-5-text{
+          margin-top: -250px;
+      }
+      .section-5-text-btn input{
+          width: 80%;
+      }
+      .section-5-text-btn button{
+          margin-top:20px;
+      }
+      footer p,a{
+          font-size: 0.9rem;
+          text-align: center;
+      }
+      footer{
+          padding: 0px 10px;
+      }
+      .services .students-panel .students {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 25px;
+        width: 250px;
+        height: 320px;
+        border: 2px solid green;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+      }
+      /* #comPanels{
+        display: block;
+      } */
+  
+  
+  }
+  /* second css*/
+  /* Full-width input fields */
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  /* Set a style for all buttons */
+  button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Extra styles for the cancel button */
+  .cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+  }
+  
+  /* Center the image and position the close button */
+  .imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+  }
+  .students-panel{
+    margin-top: 20px;
+    width: auto;
+    height: auto;
+    border: 4px solid green;
+    box-shadow: 0 0.4rem 1.5rem rgba(0,0,0,.5);
+  
+  }
+  .students{
+    margin-top: 5px;
+    width: 250px;
+    height: 320px;
+    border: 2px solid green;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 5px;
+    margin-bottom: 0px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    padding-top: 10px;
+  }
+  
+  .content{
+    background: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: -100%;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    padding: 20px;
+    left: 0;
+    transition: all 0.5s;
+    text-align: center;
+    border: 8px solid white;
+    border-radius: 8%;
+  }
+  .students:hover .content{
+    transform: perspective(800px) scale(0.9);
+    top: 0;
+  }
+  .students-panel-fulldetails{
+    display: block;
+    text-align: center;
+    border: 10px solid #4682b4;
+    height: 450px;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow: scroll;
+    white-space: nowrap;
+    position: relative;
+    box-shadow: 0 0.4rem 1.5rem rgba(0,0,0,.9);
+  }
+  .students-panel-fulldetails .ttbale{
+    display: table;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    overflow: scroll;
+    white-space: nowrap;
+  }
+  .students-panel-fulldetails .navst{
+        width: auto;
+        height: 60px;
+        background: #4682b4;
+        z-index: 1;
+        top: 0px;
+        left: 0px;
+        margin: 0;
+        padding: 5px 5px 5px 5px;
+        position: sticky;
+        color: white;
+        font-style: bold;
+        text-align: left;
+  }
+  
+  .contentfulldetails{
+    position: relative;
+    display: block;
+    border: 2px solid grey;
+    padding: 10px 10px;
+    transition: all 2s;
+    width: 100%;
+    background: #1dd1a1;
+    display:block;
+    margin:0 auto;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: auto;
+    box-shadow: 0 0.3rem 0.4rem rgba(0,0,0,.3);
+  }
+  .students-panel-fulldetails .contentfulldetails .studentphoto{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    /* animation: studenanimatefulldetails 7s 7s alternate; */
+    text-align: center;
+    transition: all 2s;
+  
+  }
+  .students-panel-fulldetails .contentfulldetails table, td{
+    width: 650px;
+   height: auto;
+   text-align: left;
+  }
+  .students-panel-fulldetails .contentfulldetails:hover .studentphoto{
+   opacity: 0.6;
+   font-size: 12px;
+   font-family: roboto;
+   font-style: bold;
+   text-align: center;
+   background: white;
+   color: green;
+   transform: perspective(800px) scale(0.95) rotateX(360deg) ;
+   border: 5px solid var(--sec-color);
+   overflow: hidden;
+   /* animation: studenanimatefulldetails 2s infinite alternate; */
+  }
+
+  @keyframes studenanimatefulldetails {
+    0%{transform: perspective(800px) rotateX(20deg);background: yellow; opacity: 1;}
+    50%{transform: perspective(800px) rotateX(0deg);background: white; opacity: 1;}
+    100%{transform: perspective(800px) rotateX(-20deg);background: green; opacity: 1;}
+  }
+  #closeP{
+    text-align: right;
+  }
+  
+  .responsive {
+    width: 100%;
+    height: auto;
+    background-size: cover;
+  }
+  #memtitle{
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    background: green;
+    border-radius: 10px;
+    font-size: 25px;
+    font-family: roboto;
+    color: white;
+    box-shadow: 5px 10px #888888;
+    margin-bottom: 5px;
+  }
+  #post{
+    font-size: 18px;
+    text-align: center;
+    color: red;
+    font-style: bold;
+  }
+  #sptitle{
+    color: black;
+    font-family: roboto;
+    font-size: 25px;
+    text-align: center;
+  }
+  #admin{
+    display: none;
+  }
+  #panSt{
+    display: block;
+  }
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+  
+  .container {
+    padding: 16px;
+  }
+  
+  span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+  
+  /* The Modal (background) */
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    width: 400px;
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button (x) */
+  .close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: red;
+    cursor: pointer;
+  }
+  
+  /* Add Zoom Animation */
+  .animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s;
+  }
+  
+  .hurufetahajji{
+    /* background: var(--tahjjiback); */
+    width: auto;
+    top: 0;
+    margin: 20px auto;
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    padding: 40px 40px 40px 40px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(auto, 250px));
+    align-items: center;
+    justify-content: center;
+      /* grid-template-rows: repeat(4, 45px); */
+    /* grid-template-row: repeat(4,minmax(177px,177px,177px,177px)); */
+  
+    grid-gap: 20px;
+    text-align: center;
+    /* grid-auto-rows: 1.58; */
+    /* justify-content:  space-between;*/
+    border: 2px solid var(--sec-color);
+  
+  }
+  #image1{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/1aleef.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image1{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/2baa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image2{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image3{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/3taa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image3{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image4{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/4thaa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image4{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image5{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/5zeem.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image5{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image6{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/6haa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image6{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image7{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/7khaa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image7{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image8{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/8daal.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image8{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image9{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/9zaa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image9{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  
+  #image10{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/91raa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image10{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image11{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/92jhee.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image11{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image12{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/93seen.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image12{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image13{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/94sheen.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image13{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image14{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/95suad.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image14{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image15{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/96duad.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image15{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image16{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/97taan.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image16{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image17{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/98zhaa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image17{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image18{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/99aen.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image18{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image19{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/991gain.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image19{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image20{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/992faa.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image20{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image21{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/993quaf.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image21{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image22{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/994qaaf.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image22{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image23{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/995laam.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image23{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image24{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/996meem.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image24{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image25{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/997noon.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image25{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image26{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/9991waaow.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image26{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image27{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/9991waaow.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image27{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image28{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/998dochashmiha.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image28{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  #image29{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/999hamza.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image29{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  #image30{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://jahid6292.github.io/aetmyweb/fezanech/makhariz/9992yaa(gairmadda).png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size:  cover;
+    object-fit: contain;
+    /* width: 150px;
+    height: 150px; */
+    /* transform: rotate(0deg); */
+    transition: all ease 0.9s;
+  }
+  
+  .thstyle:hover #image30{
+    font-size: 20px;
+    color:white;
+    width: 150px;
+    height: 150px;
+    transform-origin: top center;
+    /* transform: perspective(800px) rotateY(10deg) translate3d(0px, -50px, 5px); */
+    transform: perspective(800px) scale(1.5) rotate(180deg);
+    box-shadow: 0 .4rem 1.5rem rgba(0,0,0,.5);
+    border-radius: 10%;
+    opacity: 1;
+  
+  }
+  
+  .tahajji1{
+    background-color: var(--tahjji-one);
+    position: relative;
+  }
+  .tahajji2{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji3{
+      background-color: var(--tahjji-one);
+  
+  }
+  .tahajji4{
+      background-color: var(--tahjji-two);
+  
+  }
+  .tahajji5{
+      background-color: var(--tahjji-one);
+  
+  }
+  .tahajji6{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji7{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji8{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji9{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji10{
+    background-color: var(--tahjji-two);
+  }
+  .tahajji11{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji12{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji13{
+      background-color: var(--tahjji-one);
+  
+  }
+  .tahajji14{
+      background-color: var(--tahjji-two);
+  }
+  .tahajji15{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji16{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji17{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji18{
+      background-color: var(--tahjji-two);
+  
+  }
+  .tahajji19{
+    background-color: var(--tahjji-one);
+  }
+  .tahajji20{
+    background-color: var(--tahjji-two);
+  }
+  .tahajji21{
+      background-color: var(--tahjji-one);
+  
+  }
+  .tahajji22{
+      background-color: var(--tahjji-two);
+  
+  }
+  .tahajji23{
+      background-color: var(--tahjji-one);
+  
+  }
+  .tahajji24{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji25{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji26{
+      /* background-color: var(--tahjji-two); */
+  width: 0;
+  }
+  .tahajji27{
+        background-color: var(--tahjji-one);
+  }
+  .tahajji28{
+    background-color: var(--tahjji-two);
+  
+  }
+  .tahajji29{
+    background-color: var(--tahjji-one);
+  
+  }
+  .tahajji30{
+    background-color: var(--tahjji-two);
+  
+  }
+  .thstyle{
+        border-radius: 10%;
+        box-shadow: 0 0.4rem 0.2rem rgba(0,0,0,.3);
+        color:#1c2e1c;
+        cursor: pointer;
+        transition: all ease 0.2s;
+  }
+  .thstyle:hover{
+    transform: perspective(800px) scale(1.1);
+    color: red;
+  }
+  
+  #logocontent{
+  margin: 0;
+  padding: 0;
+  color: #111;
+  
+  }
+  #logocontent h2{
+  
+    font-size: 1.2em;
+    color: white;
+    border: 2px solid green;
+    padding: 0 3px;
+    display: block;
+    background: white;
+  }
+  
+  #logocontent h2 span{
+    display: table-cell;
+    margin: 0;
+    padding: 0;
+    animation: animate 2s linear infinite;
+  }
+  #logocontent h2 span:nth-child(1){
+    animation-delay: 0s;
+  }
+  #logocontent h2 span:nth-child(2){
+    animation-delay: 0.25s;
+  }
+  #logocontent h2 span:nth-child(3){
+    animation-delay: 0.5s;
+  }
+  #logocontent h2 span:nth-child(4){
+    animation-delay: 0.75s;
+  }
+  #logocontent h2 span:nth-child(5){
+    animation-delay: 1s;
+  }
+  #logocontent h2 span:nth-child(6){
+    animation-delay: 1.25s;
+  }
+  #logocontent h2 span:nth-child(8){
+    animation-delay: 1.50s;
+  }
+  #logocontent h2 span:nth-child(10){
+    animation-delay: 1.75s;
+  }
+  #logocontent h2 span:nth-child(11){
+    animation-delay: 2s;
+  }
+  #logocontent h2 span:nth-child(12){
+    animation-delay: 2.25s;
+  }
+  #logocontent h2 span:nth-child(13){
+    animation-delay: 2.50s;
+  }
+  #logocontent h2 span:nth-child(14){
+    animation-delay: 2.75s;
+  }
+  #logocontent h2 span:nth-child(15){
+    animation-delay: 3s;
+  }
+  #logocontent h2 span:nth-child(16){
+    animation-delay: 3.25s;
+  }
+  #logocontent h2 span:nth-child(17){
+    animation-delay: 3.5s;
+  }
+  #logocontent h2 span:nth-child(18){
+    animation-delay: 3.75s;
+  }
+  .students-panel, #ComPanel, #stPanel, #commetteedetails, #studentphotodetails{
+    display: none;
+  }
+  #usersdatafunding{
+    background-color: #4682b4;
+    color: #000;
+    border-collapse:collapse;
+  }
+  #usersdatafunding th,td{
+    border: 1px solid #4D365B;
+    padding: 3px 7px 2px 7px;
+    text-align: center;
+  }
+  @keyframes animate {
+    0%, 100%{
+        color: white;
+        filter: blur(2px);
+        text-shadow: 0 0 1px #00b3ff,
+                    0 0 2px #00b3ff,
+                    0 0 4px #00b3ff,
+                    0 0 8px #00b3ff,
+                    0 0 16px #00b3ff,
+                    0 0 32px #00b3ff,
+  
+    }
+    5%, 95%{
+      color: green;
+      filter: blur(0px);
+      text-shadow: none;
+    }
+  
+  }
+  @-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+  }
+  
+  @keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+  }
+  
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+  span.psw {
+   display: block;
+   float: none;
+  }
+  .cancelbtn {
+   width: 100%;
+  }
+  }</style>
+<body>
+  <section class="main" style="background-color: #4682b4;">
+
+    <nav>
+        <a href="#" class="logo">
+            <div id="logocontent">
+              <h2>
+
+                  <span>J</span>
+                  <span>A</span>
+                  <span>M</span>
+                  <span>A</span>
+                  <span>T</span>
+                  <span>-</span>
+                  <span>R</span>
+                  <span>A</span>
+                  <span>Z</span>
+                  <span>A</span>
+                  <span>-</span>
+<span>E</span>
+<span>-</span>
+                  <span>M</span>
+                  <span>U</span>
+                  <span>S</span>
+                  <span>T</span>
+                  <span>A</span>
+                  <span>F</span>
+                  <span>A</span>
+              </h2>
+            </div>
+
+        </a>
+        <input class="menu-btn" type="checkbox" id="menu-btn"/>
+        <label class="menu-icon" for="menu-btn">
+            <span class="nav-icon"></span>
+        </label>
+        <ul class="menu" style="border-radius: 5px;">
+<li id="receiptid"><a onclick="document.getElementById('id011').style.display='block'" style="width:auto; border-radius: 5px; cursor: pointer;">check receipt status</a></li>
+            <li><a href="#aboutus">About</a></li>
+            <li><a href="#hurufetahajji1">Huruf-e-Tahajji</a></li>
+           
+            <li><a href="#donorsinfo">معلومات من الجهات المانحة</a></li>
+            <li><a href="#">Apply Now</a></li>
+
+            <li id="login"><a class="active" onclick="document.getElementById('id01').style.display='block'" style="width:auto; border-radius: 5px; cursor: pointer;">Login</a></li>
+            <li id="logout"><a href="#" style="width:auto; border-radius: 5px; cursor: pointer;">logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- login modal start -->
+    <div id="id01" class="modal">
+
+        <form class="modal-content animate" action="/action_page.php" method="post" style="
+        width: 400px;  ">
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <p style="font-size: 22px;">Student Login </p>
+            <hr />
+          </div>
+
+          <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" id="uname" required />
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="passw" required />
+
+            <button type="submit" id="loginadmin">Login</button>
+            <label>
+              <input type="checkbox" checked name="remember" /> Remember me
+            </label>
+          </div>
+
+          <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            <span class="psw"><a href="#">Register Here</a></span>
+            <span class="psw" style="margin-right: 11px;"><a href="#">Forgot  password?</a></span>
+          </div>
+        </form>
+      </div>
+    <!-- login modal end  -->
+
+
+<!-- Check Reciept modal start -->
+    <div id="id011" class="modal">
+
+
+
+
+          <div class="container">
+
+            <div class="wrapper">
+              <div class="imgcontainer">
+                <span onclick="document.getElementById('id011').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <p style="font-size: 22px;">Check Your Receipt Status </p>
+                <hr />
+              </div>
+              <input id="receiptno" type="text" placeholder="Enter Your Receipt No." maxlength="6" spellcheck="false" required />
+              <div id="receiptstatus"></div>
+                <div class="captcha-area">
+                  <div class="captcha-img">
+                    <img src="https://jahid6292.github.io/aetmyweb/fezanech/captcha-bg.png" alt="Captch Background" />
+                    <span class="captcha"></span>
+                  </div>
+
+                  <button class="reload-btn"><i class="fas fa-redo-alt"></i></button>
+                </div>
+                <form action="#" class="input-area">
+                  <input type="text" placeholder="Enter captcha" maxlength="6" spellcheck="false" required />
+                  <button class="check-btn">Check</button>
+                </form>
+                <div class="status-text"></div>
+              </div>
+
+          </div>
+
+
+      </div>
+
+    <!--main-content-->
+
+    <!--main-content-->
+    <div class="home-content">
+
+        <!--text-->
+        <div class="home-text" >
+
+         
+<img src="https://jahid6292.github.io/aetmyweb/jamateraza/raza.webp" alt="" width="250px" height="300px" />
+<h3 style="color: white; letter-spacing: 3px;">Welcome to Jamat Raza-E-Mustafa Sagwara</h3>
+            <h1 style="color: white;"> Student Portal</h1>
+            <p style="color: white;">The purpose of Schools is to prepare students with promise
+                to enhance their intellectual, physical, social, emotional, spiritual,
+                and artistic growth so that they may realize their power for good
+                as citizens</p>
+        <!--login-btn-->
+        <a href="#" class="main-login" style="border-radius: 5px;">Apply Now</a>
+        </div>
+        <!--img-->
+        <div class="home-img" style="width: 500px;" >
+            <img src="https://jahid6292.github.io/aetmyweb/fezanech/hero.png" width="300px" height="300px" style="text-shadow: 20px 22px; border-radius: 10%;"/>
+            <marquee width="100%" direction="left" onmouseover="this.stop();"
+            onmouseout="this.start();">
+                <a href="#" style="color: white;">Addmission open of 1th Juanury 2022, Stream Takti, Siparah, Amma and Quraan.</a>
+                </marquee>
+                <marquee width="100%" direction="right" onmouseover="this.stop();"
+            onmouseout="this.start();">
+                <a href="#" style="color: white;">Addmission open of 1th Juanury 2022, Stream Takti, Siparah, Amma and Quraan.</a>
+                </marquee>
+        </div>
+
+    </div>
+
+    <!--arrow-->
+    <div class="arrow"></div>
+    <span class="scroll">Scroll</span>
+</section>
+
+<!--Students----------------------->
+<section class="services" >
+<div class="noticeboard">
+      <h2>:: महत्‍वपूर्ण सूचना बोर्ड ::</h2>
+      <div class="console-container"><span id="text"></span>
+      <div class="console-underscore" id="console">&#95;</div></div>
+      <h4 id="noticedate"></h4>
+      <h5><span id="headmaster"></span><br />Jamat Raza-E-Mustafa, <br />Sagwara</h5>
+</div>
+</section>
+<div id="panSt">
+<section class="services" id="commetteedetails">
+<div class="services-heading">
+<h2>COMMITEE MEMBER'S</h2>
+<p>इंतजामिया कमेटी के सदस्‍यों का विवरण</p>
+</div>
+<div class="students-panel">
+<marquee id="ComPanel" width="100%" direction="right" scrollamount="5" behavior="alternate" onmouseover="this.stop();" onmouseout="this.start();">
+<!-- <div class="students" id="comPanels"><h3 id="memtitle">Jaahid Hussain</h3><img class="responsive" src="images/heDro.png" alt="">
+<div class="content">
+  <h2>सदर</h2>
+  <p>फैजाने चिश्चितया कमेटी</p>
+</div>
+</div> -->
+
+
+
+</marquee>
+
+</div>
+</section>
+<!--Hurufe tahajji----------------------->
+
+
+
+<!--Hurufe tahajji----------------------->
+<audio src="https://jahid6292.github.io/aetmyweb/jamateraza/bismillah.mp3" class='enter' type="audio/mpeg"></audio>
+<section class="quraan" id="hurufetahajji1">
+<div class="services-heading">
+<h2>بِسۡمِ اللّٰہِ الرَّحۡمٰنِ الرَّحِیۡمِ</h2>
+<h3>تعلم وتعليم القرآن</h3>
+<h3>HURUF E TAHAJJI</h3>
+  <div class="hurufetahajji">
+    <div class="tahajji1 thstyle">
+      <div id="image5"></div>
+      <h1>ج</h1>
+    </div>
+    <div class="tahajji2 thstyle">
+      <div id="image4"></div>
+      <h1>ث</h1>
+    </div>
+    <div class="tahajji3 thstyle">
+      <div id="image3"></div>
+      <h1>ت</h1>
+    </div>
+    <div class="tahajji4 thstyle">
+      <div id="image2"></div>
+      <h1>ب</h1>
+    </div>
+    <div class="tahajji5 thstyle">
+      <div id="image1"></div>
+      <h1>ا</h1>
+    </div>
+    <div class="tahajji6 thstyle">
+      <div id="image10"></div>
+      <h1>ر</h1>
+    </div>
+    <div class="tahajji7 thstyle">
+      <div id="image9"></div>
+      <h1>ذ</h1>
+    </div>
+    <div class="tahajji8 thstyle">
+      <div id="image8"></div>
+      <h1>د</h1>
+    </div>
+    <div class="tahajji9 thstyle">
+      <div id="image7"></div>
+      <h1>خ</h1>
+    </div>
+    <div class="tahajji10 thstyle">
+      <div id="image6"></div>
+      <h1>ح</h1>
+    </div>
+    <div class="tahajji11 thstyle">
+      <div id="image15"></div>
+      <h1>ض</h1>
+    </div>
+    <div class="tahajji12 thstyle">
+      <div id="image14"></div>
+      <h1>ص</h1>
+    </div>
+    <div class="tahajji13 thstyle">
+      <div id="image13"></div>
+      <h1>ش</h1>
+    </div>
+    <div class="tahajji14 thstyle">
+      <div id="image12"></div>
+      <h1>س</h1>
+    </div>
+    <div class="tahajji15 thstyle">
+      <div id="image11"></div>
+      <h1>ز</h1>
+    </div>
+    <div class="tahajji16 thstyle">
+      <div id="image20"></div>
+      <h1>ف</h1>
+    </div>
+    <div class="tahajji17 thstyle">
+      <div id="image19"></div>
+      <h1>غ</h1>
+    </div>
+    <div class="tahajji18 thstyle">
+      <div id="image18"></div>
+      <h1>ع</h1>
+    </div>
+    <div class="tahajji19 thstyle">
+      <div id="image17"></div>
+      <h1>ظ</h1>
+    </div>
+    <div class="tahajji20 thstyle">
+      <div id="image16"></div>
+      <h1>ط</h1>
+    </div>
+    <div class="tahajji21 thstyle">
+      <div id="image25"></div>
+      <h1>ن</h1>
+    </div>
+    <div class="tahajji22 thstyle">
+      <div id="image24"></div>
+      <h1>م</h1>
+    </div>
+    <div class="tahajji23 thstyle">
+      <div id="image23"></div>
+      <h1>ل</h1>
+    </div>
+    <div class="tahajji24 thstyle">
+      <div id="image22"></div>
+      <h1>ك</h1>
+    </div>
+    <div class="tahajji25 thstyle">
+      <div id="image21"></div>
+      <h1>ق</h1>
+    </div>
+    <div class="">
+      <h1></h1>
+    </div>
+    <div class="tahajji27 thstyle">
+      <div id="image30"></div>
+      <h1>ى</h1>
+    </div>
+    <div class="tahajji28 thstyle">
+      <div id="image29"></div>
+      <h1>ء</h1>
+    </div>
+    <div class="tahajji29 thstyle">
+      <div id="image28"></div>
+      <h1>ھ</h1>
+    </div>
+    <div class="tahajji30 thstyle">
+      <div id="image27"></div>
+      <h1>و</h1>
+    </div>
+  </div>
+</div>
+</section>
+
+<!--Students----------------------->
+
+<!--Students----------------------->
+<section class="services" id="studentphotodetails">
+<div class="services-heading">
+<h2>STUDENT'S DETAILS</h2>
+<p >मदरसे में पढने वाले तलबाओं का विवरण एक लाईन में</p>
+</div>
+<div class="students-panel">
+<marquee id="stPanel" width="100%" direction="left" onmouseover="this.stop();"
+onmouseout="this.start();" scrollamount="10">
+
+<!-- <div class="content"><h2>तलबा</h2>
+<p>फैजाने चिश्चितया कमेटी</p>
+<div class="students">
+  <img class="responsive" src="https://jahid6292.github.io/aetmyweb/fezanech/comonavatar1.png" alt="">
+
+</div>
+</div> -->
+
+
+</marquee>
+
+</div>
+</section>
+
+<!--Students----------------------->
+
+
+<!--Students----------------------->
+
+
+
+<!-- <div class="students" id="comPanels"><h3 id="memtitle">Jaahid Hussain</h3><img class="responsive" src="images/heDro.png" alt="">
+<div class="content">
+  <h2>सदर</h2>
+  <p>फैजाने चिश्चितया कमेटी</p>
+</div>
+</div> -->
+
+
+
+
+<section class="services" id="donorsinfo">
+    <div class="services-heading">
+<h2>معلومات من الجهات المانحة</h2>
+<p >DONOR'S INFO</p>
+</div>
+<div class="students-panel-fulldetails">
+<div class="ttbale">
+<div class="navst">
+<table style="width:650px;">
+<tr>
+<th>Date -----</th>
+<th>Receipt No.</th>
+<th>Pary Code</th>
+<th>Amount</th>
+<th>Rec by Party Code</th>
+<th></th>
+</tr>
+</table>
+</div>
+<!-- <div class="navst"><p> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; </p></div> -->
+<marquee id="stFullDetails" width="100%" direction="down"  onmouseover="this.stop();"
+onmouseout="this.start();" scrollamount="3">
+
+<!-- <div class="contentfulldetails"><h2>तलबा</h2><p>फैजाने चिश्चितया कमेटी</p>
+<div class="studentphoto">
+<img class="responsive" src="https://jahid6292.github.io/aetmyweb/fezanech/comonavatar1.png" alt="">
+</div>
+</div>
+
+<div class="contentfulldetails"><h2>तलबा</h2><p>FOUNDER</p>
+<div class="studentphoto">
+<h3>FOUNDER OF JAMATE RAZA SAGWARA GROUP </h3>
+</div>
+</div> -->
+</marquee>
+</div>
+</div>
+</section>
+<!--services----------------------->
+<section class="services" id="aboutus">
+    <!--heading----------->
+    <div class="services-heading">
+        <h2>OUR PROFESSIONAL COURSES</h2>
+        <p>अपने बच्‍चो को दीनी तालीमात की मालुमात की जानकारी जरूर करवाये ताकि आपके बच्‍चो का अदब का तकाजा मालुम हो सके</p>
+    </div>
+    <!--box-container----------------->
+    <div class="box-container">
+        <!--box-1-------->
+        <div class="box responsive">
+            <img src="https://jahid6292.github.io/aetmyweb/fezanech/kitab.gif" />
+            <font>Batchlor of Quraan</font>
+            <p>What is Quraan?</p>
+            <!--btn--------->
+            <a href="#">Apply Now</a>
+        </div>
+        <!--box-1-------->
+    </div>
+</section>
+
+</div>
+<div class="students-panel"></div>
+<section id="admin">
+ <!--heading----------->
+ <div class="services-heading">
+  <h2>USER LOGIN PANEL</h2>
+  <p>Panel for User Information.</p>
+</div>
+<!--box-container----------------->
+<div class="box-container">
+  <!--box-1-------->
+  <div class="box responsive">
+     
+      <h2 id="usersforguest">Welcoome to User.</h2>
+      <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+      <br>
+      <br>
+     
+        <table id="usersdatafunding">
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Reciept No.</th>
+            <th>Amount</th>
+            <th>Recieve By Party Code</th>
+            </tr>
+          </thead>
+          <tbody id="userdetrails">
+
+          </tbody>
+           
+        </table>
+    
+  </div>
+  <!--box-1-------->
+</div>
+</section>
+
+<!--footer------------->
+<footer>
+    <p>Copyright (C) - 2023 | Developed By <a href="https://www.aetmyweb.com/">AR Expert Team</a> </p>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script type="text/javascript" src="https://jahid6292.github.io/aetmyweb/jamateraza/js/jamatrazaescript.js"></script>
+<!--Google Charts of Funding-->
+
+
+ 
+
+  
+
+
+<script>
+  
+  function fundingdetailsoffund(){
+    
+    
+            // Get the Fundind Details of Jamate Raza Fund
+            fetch('https://script.google.com/macros/s/AKfycby9jNQauS0TIqsYEeDuFJgiYauRbHonQFI_fxO1tJiktfquk2Dlt1bvjfFyO8-dhqRf3w/exec')
+                .then(res => res.json())
+                .then(data => {
+
+    
+                  var s = data.content;
+    
+              
+                                document.getElementById('totalfundingbalance').innerText = s[1][2];
+                                document.getElementById('totalexpensesbalance').innerText = s[1][3];
+                                document.getElementById('totalavailablebalance').innerText = s[1][4];
+                });
+        }
+
+
+
+
+suchnaboard();
+googlechartofusers();
+jamaterazasagwarafounder();
+rasidnosystem();
+        // Get the modal
+        document.getElementById("loginadmin").addEventListener('click',function(e){
+           e.preventDefault(); // Cancel the native event
+           e.stopPropagation();// Don't bubble/capture the event any further
+           loginfunctionusers();
+      });
+
+   // Get the modal
+   document.getElementById("logout").addEventListener('click',function(e){
+           e.preventDefault(); // Cancel the native event
+           
+            window.location.href='https://jamatrazaemustafasagwara.aetmyweb.com';
+      });
+
+function loginfunctionusers(){
+            // Get the Student full details of Madarsa fezane Chishtiya
+            fetch('https://script.google.com/macros/s/AKfycbwNFdOFHVsI_f3cRwb4Ha3AI--5bdILPCZvwsVZzEnxor2RMvQ1NsqfsM_HQSnpEW8pcg/exec')
+                .then(res => res.json())
+                .then(data => {
+                  var s = data.content;
+                  // var d = s.slice(-5);
+                  var username = document.getElementById("uname").value;
+                  var password = document.getElementById("passw").value;
+
+                  var targetadminpanel = document.getElementById('admin');
+                  var panSt = document.getElementById('panSt');
+
+                  for(var i=1;i<s.length;i++){
+                    var dbuser = s[i][0];
+                    var dbpasw = s[i][1];
+
+                    if(username == dbuser && password == dbpasw){
+                      //console.log(s);
+                      targetadminpanel.style.display = "block";
+                      panSt.style.display = "none";
+                      document.getElementById('id01').style.display = 'none';
+                      document.getElementById('logout').style.display = 'block';
+                      document.getElementById('login').style.display = 'none';
+                      
+                      document.getElementById('usersforguest').innerText = 'Welcome to the '+username;
+                      userfundingmonthwisedetails(username);
+                      return true;
+                    }
+                   
+                }
+                alert("Wrong Password Username"+username+password);
+                return false;
+                });
+        }
+
+
+let audio = document.querySelector('.quraan .services-heading h2');
+let audioArr = document.getElementsByTagName('audio');
+// console.log(audioArr[0]);
+audio.addEventListener('mouseenter', () =>{
+audioArr[0].play();
+});
+</script>
+</body>
+</html>

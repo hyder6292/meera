@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  input[type=text], select, textarea, input[type=password], input[type=number] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+  }
+  
+  input[type=submit] {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  
+  .container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  
+  .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+  }
+  
+  .col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  #panelofexpensandincome{
+    background-color: rgb(4 201 166);
+    position: relative;
+    /* top: 50%;
+    left: 65%; */
+    /* margin-right: -50%; */
+    /* transform: translate(-50%, -50%); */
+    padding: 25px;
+    /* width: 700px; */
+    height: 700px;
+        display: none;
+  }
+  .box{
+    background-color: rgb(36, 162, 4);
+    position: absolute;
+    top: 90%;
+    left: 30%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    padding: 25px;
+    display: none;
+    margin-top: 70px;
+    margin-left: 80px;
+  }
+  .boxexpenses{
+    background-color: #e11414;
+    position: absolute;
+        top: 70%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        padding: 25px;
+        display: none;
+  }
+  .box_login
+  {
+    background-color: aquamarine;
+    position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        padding: 25px;
+        display: block;
+  }
+  #username{
+    display : none;
+  }
+  #logout{
+  display: none;
+  }
+  #btnSubmit, #amount
+  {
+    display: none;
+  }
+  #preloader{
+    background: #fff url(https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiwrudMNDsSPX_IUxMBzTWCrrYKOrMYscftlwFC_VFrlVLU5QbbQQ-__5YULWiKSR8zUkOK5U2oI3RqcNO7UDo9mTvISdqL4tTzUWGvj0usr9ZCwRSC870yhobJAx_sRzJys_zghFZhcVTWvyqk_uIEDSuS6uAPIUY_An4MCP5aSHdpJ0iP3orNucEaIyGS/s320/loader.gif) no-repeat center center;
+    background-size: 20%;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    opacity: 0.9;
+    display: block;
+  }
+ #fundingtable{
+  background-color: #f2f930;
+  color: #000;
+  border-collapse:collapse;
+  padding: 30px;
+margin-left: 60px;
+ }
+ #fundingtable th, td{
+ border: 1px solid #4D365B;
+ padding: 3px 7px 2px 7px;
+ }
+#income{
+margin-left: 60px;
+}
+#expens{
+margin-left: 60px;
+}
+#usersdatafunding{
+    background-color: #4682b4;
+    color: #000;
+    border-collapse:collapse;
+  }
+  #usersdatafunding th,td{
+    border: 1px solid #4D365B;
+    padding: 3px 7px 2px 7px;
+    text-align: center;
+  }
+
+  /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+  </style>
+<body>
+  <div id="preloader"></div>
+  <p id="login_panal_user"><span id="loging">Login</span> <span id="logout"><a href="#">Logout</a></span></p>
+  <h3 id="username">welcome to : </h3>
+
+
+
+<!-- Table of Funding Details with box -->
+<div id="panelofexpensandincome">
+  <button id="income">Income</button>
+  <button id="expens">Expnese</button>
+    <!-- Table of Funding Details -->
+<table id="fundingtable">
+ <tr>
+ <th>Total Fund Rec</th>
+ <th>Total Expensed</th>
+ <th>Total Available Fund</th>
+  </tr>
+  <tr>
+     <td id="totalfundingbalance">2200</td>
+     <td id="totalexpensesbalance">2100</td>
+     <td id="totalavailablebalance">100</td>
+  </tr>
+</table>
+<br />
+      <div class="box" id="box"> 
+       
+          <h2>Jamate Raza Fund Recieve Diary</h2>
+        
+            <div class="container">
+              
+              <form id="frmSubmit">
+                <div class="row">
+                  <div class="col-25">
+                    <label for="fname">Type Party Code</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="number" id="particode" name="particode" placeholder="Paryty Code" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-25">
+                  </div>
+                  <div class="col-75">
+                    <label type="text" id="partiname"></label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-25">
+                    <label for="amount">Amount</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="number" id="amount" name="amount" placeholder="Amount" />
+                    <input type="number" id="recievebyparticode" name="recievebyparticode" placeholder="Recived by ID" hidden />
+                  </div>
+                </div>
+                <br />
+                <div class="row">
+                  <input type="submit" value="Deposit" id="btnSubmit" />
+                  <div id="msg"></div>
+                </div>
+              </form>
+             
+
+          </div>
+          <br />
+          <br />
+         
+            <table id="usersdatafunding">
+              <thead>
+              <tr>
+                <th>Date</th>
+                <th>Reciept No.</th>
+                <th>Amount</th>
+                <th>Reciept by Party Code</th>
+                <th>Party Code</th>
+                </tr>
+              </thead>
+              <tbody id="userdetrails">
+       
+              </tbody>
+             
+            </table>    
+            <br />
+            <br />
+            <button id="clickmetotal">Click and Show Total Amount</button>
+            <h2 id="subtotal"></h2>
+      </div> 
+
+      <!-- Table of Funding Details with box for expenses-->
+
+      <div class="boxexpenses" id="boxexpenses"> 
+       
+          <h2>Jamate Raza Expenses Diary</h2>
+         <!-- Table of Funding Details -->
+ 
+            <div class="container">
+              
+              <form id="frmExpensesSubmit">
+                <div class="row">
+                  <div class="col-25">
+                    <label for="fname">Expense by Party Code</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="number" id="expbyparticode" name="expbyparticode" placeholder="Party Code" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-25">
+                  </div>
+                  <div class="col-75">
+                    <label type="text" id="exppartiname"></label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-25">
+                    <label for="amount">Amount</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="number" id="expamount" name="amount" placeholder="Amount" />
+                    <textarea type="number" id="description" name="description" placeholder="Describe Expense Summary." ></textarea>
+                  </div>
+                </div>
+                <br />
+                <div class="row">
+                  <input type="submit" value="Expense" id="btnSubmitforexp" />
+                  <div id="msgforexp"></div>
+                </div>
+              </form>
+            
+
+          </div>
+          
+
+      </div> 
+    
+  </div>
+  <!-- part of login-->
+  <div class="box_login" id="box_login"> 
+    <h2><span><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcagslh8RFGrcLy4EUEdbMcwB4h2SMUfb_iyzUKETDNcuI_roKBam_IfTtCyGHinXDOkJ8v0JnQk5kIbZ28_7v9rG3Qo7BRw_PjWL5Hmam4YGCmJZvf4dH7XEbdyXj2VDHhFo3XMVbVSztGC3V_VshIwJY6JPcTn0Q1J7rtuDHaZLaBvCFtk_XJB1yO6x9/s1600/logo.png" alt="" width="40px" height="40px" alt="" width="40px" height="40px" /></span> Jamate Raza Login Page </h2>
+    
+    <div class="container">
+
+      <form action="/action_page.php">
+        <div class="row">
+          <div class="col-25">
+            <label for="user" accesskey="u">USERNAME</label>
+            <input type="number" name="user" id="usercode"  placeholder="Party Code Here" size="25" class="text" accesskey="u" />
+            <label for="password">PASSWORD</label>
+            <input type="password" id="userpass"  size="25" class="text" accesskey="u"  />
+          </div>
+        </div>
+            
+        <br />
+        <div class="row">
+          <input type="submit" name="Login" value="Log In" class="button_login" />
+        </div>
+      </form>
+    
+
+  </div>
+    
+  
+  </div>
+<!-- this script area-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jahid6292.github.io/aetmyweb/jamateraza/js/jamatadmin.js"></script>
+    <script>
+ 
+ function updateSubTotal() {
+  var table = document.getElementById("usersdatafunding");
+  let subTotal = Array.from(table.rows).slice(1).reduce((total, row) => {
+    return total + parseFloat(row.cells[2].innerHTML);
+  }, 0);
+  alert(subTotal.toFixed(2));
+  document.getElementById("subtotal").innerHTML = "Your Total Deposit = Rs." + subTotal.toFixed(2);
+}
+ 
+      window.addEventListener('load', () => {
+        document.getElementById('preloader').style.display = 'none';
+    });
+    
+    
+      
+    jQuery("#particode").blur(function() {
+       
+        fetchpartidetails();
+    });
+    
+    
+    jQuery("#expbyparticode").blur(function() {
+       
+        fetchpartidetailsforrazaexp();
+   });
+
+   sumtotal_btn = document.querySelector("#clickmetotal");
+   sumtotal_btn.addEventListener("click", e =>{
+            e.preventDefault();
+            updateSubTotal();
+          });
+    // deposit recipt entry 
+    
+    checkBtn = document.querySelector(".button_login");
+    income_btn = document.querySelector("#income");
+    expense_btn = document.querySelector("#expens");
+    income_btn.style.display = 'none';
+
+    expense_btn.addEventListener("click", e =>{
+            e.preventDefault();
+   
+            document.querySelector('.boxexpenses').style.display = 'block';
+            document.querySelector('.box').style.display = 'none';
+            expense_btn.style.display = 'none';
+            income_btn.style.display = 'block';
+            });
+    
+    income_btn.addEventListener("click", e =>{
+    e.preventDefault();
+    
+    document.querySelector('#box').style.display = 'block';
+    document.querySelector('#boxexpenses').style.display = 'none';
+    expense_btn.style.display = 'block';
+    income_btn.style.display = 'none';
+
+    });
+// this coding for funding receive
+    jQuery('#frmSubmit').on('submit',function(e){
+            e.preventDefault();
+            var username = jQuery('#usercode').val();
+            
+    
+            jQuery('#btnSubmit').attr('disabled',true);
+            jQuery.ajax({
+                url:'https://script.google.com/macros/s/AKfycbzMrzPJ5zNdf7D1e4TPUuW5EMUTQjYNnSdW3pNA7Vxc8ulcjIZvw4qDClRZJ9q63yCSZQ/exec',
+                type:'post',
+                data:jQuery('#frmSubmit').serialize(),
+          beforeSend: function(){
+            jQuery('#msg').html('Please wait...');
+            jQuery("#preloader").css("display","block");
+          },
+                success:function(result){
+                    //jQuery('#frmSubmit')[0].reset();
+                    jQuery('#msg').html('Thank You');
+                    jamaterazasagwarafounder();
+            jQuery('#btnSubmit').attr('disabled',false);
+            jQuery('#frmSubmit #btnSubmit').hide();
+            jQuery('#frmSubmit #amount').hide();
+            jQuery("#preloader").css("display","none");
+            jQuery("#particode").attr('readonly',false);
+             jQuery("#particode").val("");
+             fundingdetailsoffund();
+             adminfundingmonthwisedetailss(username);
+                    //window.location.href='';
+                }
+            });
+          });
+    
+ // this coding for expensed of fund
+ jQuery('#frmExpensesSubmit').on('submit',function(e){
+            e.preventDefault();
+        
+    
+            jQuery('#frmExpensesSubmit').attr('disabled',true);
+            jQuery.ajax({
+                url:'https://script.google.com/macros/s/AKfycbwuU1h6CscSi2BRyiYTtJCSGGRA2Llz5fPWDHj-aqAgwn8WV0RXL6eWqPWVIyaDXIN_fw/exec',
+                type:'post',
+                data:jQuery('#frmExpensesSubmit').serialize(),
+          beforeSend: function(){
+            jQuery('#msgforexp').html('Please wait...');
+            jQuery("#preloader").css("display","block");
+          },
+                success:function(result){
+                    //jQuery('#frmSubmit')[0].reset();
+                    jQuery('#msgforexp').html('Inna lillahi wa inna ilehi rajeun');
+                    jQuery('#frmExpensesSubmit').attr('disabled',false);
+            jQuery('#frmExpensesSubmit #btnSubmitforexp').hide();
+            jQuery('#frmExpensesSubmit #expamount').hide();
+            jQuery("#preloader").css("display","none");
+            jQuery("#expbyparticode").attr('readonly',false);
+             jQuery("#expbyparticode").val("");
+             jQuery("#description").val("");
+             jQuery("#msgforexp").val("");
+    
+                    //window.location.href='';
+                }
+            });
+          });   
+      
+    
+    
+    // this par of login
+    checkBtn.addEventListener("click", e =>{
+            e.preventDefault();
+    
+    
+    
+            loginfunction();
+    
+    
+            });
+    
+    
+       function loginfunction(){
+    
+        document.getElementById('preloader').style.display = 'block';
+                // Get the Student full details of Madarsa fezane Chishtiya
+                fetch('https://script.google.com/macros/s/AKfycby9jNQauS0TIqsYEeDuFJgiYauRbHonQFI_fxO1tJiktfquk2Dlt1bvjfFyO8-dhqRf3w/exec')
+                    .then(res => res.json())
+                    .then(data => {
+    
+                      // console.log(data.content[1][0]+" s "+data.content[1][1]);
+                      var s = data.content;
+                      // var d = s.slice(-5);
+                      var username = document.getElementById("usercode").value;
+                      var password = document.getElementById("userpass").value;
+    
+                      var boxlogin = document.getElementById('box_login');
+                      var boxrecipt = document.getElementById('box');
+    
+                      var panelofbox = document.getElementById('panelofexpensandincome');
+                    
+    
+                         for(var i = 0; i < s.length; i++) {
+                                  var dbuser = s[i][0];
+                                  var dbpasw = s[i][1];
+    
+                                  if(username == dbuser && password == dbpasw){
+                                    console.log(s);
+                                    boxrecipt.style.display = "block";
+                                    boxlogin.style.display = "none";
+                                    panelofbox.style.display = 'block';
+                                    document.getElementById('loging').style.display = 'none';
+                                    document.getElementById('logout').style.display = 'block';
+                                    document.getElementById('username').style.display = 'block';
+                                    document.querySelector('#username').innerText = "Welcomet to : "+dbuser;
+                                    document.getElementById('preloader').style.display = 'none';
+    
+                                    document.querySelector('#frmSubmit #recievebyparticode').value = username ;
+                                    document.getElementById('totalfundingbalance').innerText = s[1][2];
+                                    document.getElementById('totalexpensesbalance').innerText = s[1][3];
+                                    document.getElementById('totalavailablebalance').innerText = s[1][4];
+                                    adminfundingmonthwisedetailss(username);
+                                    
+                                    return true;
+                                  }
+                              }
+                              alert('Not authorise.');
+                              document.getElementById('preloader').style.display = 'none';
+                              return false;
+    
+    
+                    });
+            }
+    
+            function adminfundingmonthwisedetailss(useidofamdin){
+          // Get the Student full details of Madarsa fezane Chishtiya
+          fetch('https://script.google.com/macros/s/AKfycbwfTangplqxQ9J35Up8uj-ovtCMz3rlvGFVEIEkL2_6g4Xh2YMYJywcLC2iUCRSl66jCg/exec')
+              .then(res => res.json())
+              .then(data => {
+                var s = data.content;
+                // var d = s.slice(-5);
+                console.log(s);
+                 var userid = useidofamdin;
+
+                 var currmonth = new Date().getMonth();
+                 var curryear = new Date().getFullYear();
+       
+                for(var i=1;i<s.length;i++){
+                           var dbuserid = s[i][2];
+                           var month = new Date(s[i][3]).getMonth();
+                      var year = new Date(s[i][3]).getFullYear();
+                    
+                        if(dbuserid==userid){
+                          if(month==currmonth){
+                          var e = new Date(s[i][3]).toDateString();
+                     
+                      var target = document.querySelector('#userdetrails');
+                              var team =         
+                                                   '<tr>'+
+                                                   '<td id="daterec">'+e+'</td>'+
+                                                   '<td id="receiptno">'+s[i][4]+'</td>'+
+                                                    '<td class="dpamt" id="jmtamount">'+s[i][1]+'</td>'+
+                                                    '<td id="recbypartycode">'+s[i][2]+'</td>'+
+                                      '<td>'+s[i][0]+'</td>'+
+                     
+                                                   '</tr>';
+                                                    
+                                                  target.insertAdjacentHTML("beforeend", team);
+                                                   }
+                        }
+                          
+                }
+                     
+                              // document.getElementById('preloader').style.display = 'none';
+                              // return false;
+              });
+      }
+            function fetchpartidetails(){
+              document.getElementById('preloader').style.display = 'block';
+                // Get the Student full details of Madarsa fezane Chishtiya
+                fetch('https://script.google.com/macros/s/AKfycbxhmlHTVVudu3b6-Z1SSlKm7skWzGnSWHZjEKeDB6yN8eH-hU3O28oCFh5A0S4Ie51StQ/exec') // this fetch reciept
+                    .then(res => res.json())
+                    .then(data => {
+                      
+                      // console.log(data.content[1][0]+" s "+data.content[1][1]);
+                      var s = data.content;
+                      // console.log(s[1][1]);
+                      // var d = s.slice(-5);
+                      var particode = document.getElementById("particode").value;
+                      var partiname = document.getElementById("partiname").innerText;
+                      
+    
+                         for(var i = 1; i < s.length; i++) {
+                                  var prtcd = s[i][0];
+                                  var prtnm = s[i][1];
+    
+                                  if(particode == prtcd){
+                                    document.querySelector("#frmSubmit #partiname").innerText = prtnm;
+                                    
+                                    document.querySelector("#frmSubmit #btnSubmit").style.display = 'block';
+                                    document.querySelector("#frmSubmit #amount").style.display = 'block';
+                                    document.getElementById("particode").readonly=true;
+                                    document.getElementById('preloader').style.display = 'none';
+                                    return true;
+                                  }
+                           
+                              }
+                              alert('Does not Your Party');
+                              document.getElementById('preloader').style.display = 'none';
+                              return false;
+    
+    
+    
+    
+                      
+    
+    
+                    });
+            }
+    
+           // fethc details for raza expenses
+           function fetchpartidetailsforrazaexp(){
+              document.getElementById('preloader').style.display = 'block';
+                // Get the Student full details of Madarsa fezane Chishtiya
+                fetch('https://script.google.com/macros/s/AKfycbxhmlHTVVudu3b6-Z1SSlKm7skWzGnSWHZjEKeDB6yN8eH-hU3O28oCFh5A0S4Ie51StQ/exec') // this fetch reciept
+                    .then(res => res.json())
+                    .then(data => {
+                      
+                      // console.log(data.content[1][0]+" s "+data.content[1][1]);
+                      var s = data.content;
+                      // console.log(s[1][1]);
+                      // var d = s.slice(-5);
+                      var particode = document.getElementById("expbyparticode").value;
+                      var partiname = document.getElementById("exppartiname").innerText;
+                      
+    
+                         for(var i = 1; i < s.length; i++) {
+                                  var prtcd = s[i][0];
+                                  var prtnm = s[i][1];
+    
+                                  if(particode == prtcd){
+                                    document.querySelector("#frmExpensesSubmit #exppartiname").innerText = prtnm;
+                                    
+                                    document.querySelector("#frmExpensesSubmit #btnSubmitforexp").style.display = 'block';
+                                    document.querySelector("#frmExpensesSubmit #expamount").style.display = 'block';
+                                    document.getElementById("expbyparticode").readonly=true;
+                                    document.getElementById('preloader').style.display = 'none';
+                                    return true;
+                                  }
+                           
+                              }
+                              alert('Your are not permissable for expennses.');
+                              document.getElementById('preloader').style.display = 'none';
+                              return false;
+    
+    
+    
+    
+                      
+    
+    
+                    });
+            }
+    
+    
+           
+    </script>
+</body>
+</html>
